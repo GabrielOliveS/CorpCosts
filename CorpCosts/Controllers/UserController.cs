@@ -24,11 +24,33 @@ namespace CorpCosts.Controllers
             _userRepository.CreateUser(user);
             return Created("", user);
         }
-        [HttpGet]
-        public ActionResult GetUser([FromQuery] ObjectId objectId)
+
+        [HttpGet("{id}")]
+        public ActionResult GetUser([FromRoute] ObjectId id)
         {
-            var user = _userRepository.GetUserById(objectId);
+            var user = _userRepository.GetUserById(id);
             return Ok(user);
+        }
+
+        [HttpGet]
+        public ActionResult GetAll()
+        {
+            var userList = _userRepository.GetAll();
+            return Ok(userList);
+        }
+
+        [HttpPost("{id}")]
+        public ActionResult EditUser([FromRoute] ObjectId id, [FromBody] User user)
+        {
+            _userRepository.EditUser(id, user);
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        public ActionResult DeleteUser([FromRoute] ObjectId id)
+        {
+            _userRepository.DeleteUser(id); 
+            return Ok();
         }
     }
 }
+    
