@@ -10,45 +10,44 @@ namespace CorpCosts.Controllers
     [Route("[controller]")]
     public class UserController : Controller
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserController(IMongoDatabase db)
+        public UserController(IUserRepository repository)
         {
-            var repository = new UserRepository(db);
             _userRepository = repository;
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public ActionResult CreateUser([FromBody] User user)
         {
-            _userRepository.CreateUser(user);
+            _userRepository.Create(user);
             return Created("", user);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public ActionResult GetUser([FromRoute] ObjectId id)
         {
-            var user = _userRepository.GetUserById(id);
+            var user = _userRepository.GetById(id);
             return Ok(user);
         }
 
-        [HttpGet]
+        [HttpGet("get-all")]
         public ActionResult GetAll()
         {
             var userList = _userRepository.GetAll();
             return Ok(userList);
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("edit/{id}")]
         public ActionResult EditUser([FromRoute] ObjectId id, [FromBody] User user)
         {
-            _userRepository.EditUser(id, user);
+            _userRepository.Edit(id, user);
             return Ok();
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public ActionResult DeleteUser([FromRoute] ObjectId id)
         {
-            _userRepository.DeleteUser(id); 
+            _userRepository.Delete(id); 
             return Ok();
         }
     }

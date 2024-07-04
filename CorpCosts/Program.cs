@@ -1,3 +1,4 @@
+using CorpCosts.DAL;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,9 @@ builder.Services.AddSingleton<IMongoDatabase>(s =>
     var url = new MongoUrlBuilder(connection);
     return s.GetService<IMongoClient>().GetDatabase(url.DatabaseName);
 });
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
 var app = builder.Build();
 
